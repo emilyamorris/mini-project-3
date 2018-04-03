@@ -11,3 +11,34 @@ library(leaflet)
 library(sf)
 library(macleish)
 ```
+
+```{r}
+macleish <- etl("macleish")
+macleish %>%
+  etl_update()
+
+whately <- macleish %>%
+  tbl("whately")
+whately %>%
+  mutate(the_year = strftime('%Y', when)) %>%
+  group_by(the_year) %>%
+  summarize(N = n(), begin = min(when), end = max(when), avg_temp = mean(temperature))
+
+orchard <- macleish %>%
+  tbl("orchard")
+orchard %>%
+  mutate(the_year = strftime('%Y', when)) %>%
+  group_by(the_year) %>%
+  summarize(N = n(), begin = min(when), end = max(when), avg_temp = mean(temperature))
+
+daily <- whately %>%
+  mutate(the_date = date(when)) %>%
+  group_by(the_date) %>%
+  summarize(N = n(), avgTemp = mean(temperature)) %>%
+  collect()
+```
+
+```{r}
+sap <- macleish::maple_sap
+```
+
