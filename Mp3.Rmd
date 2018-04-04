@@ -13,39 +13,29 @@ library(macleish)
 ```
 
 ```{r}
-macleish <- etl("macleish")
-macleish %>%
-  etl_update()
-
-whately <- macleish %>%
-  tbl("whately")
-whately %>%
-  mutate(the_year = strftime('%Y', when)) %>%
-  group_by(the_year) %>%
-  summarize(N = n(), begin = min(when), end = max(when), avg_temp = mean(temperature))
-
-orchard <- macleish %>%
-  tbl("orchard")
-orchard %>%
-  mutate(the_year = strftime('%Y', when)) %>%
-  group_by(the_year) %>%
-  summarize(N = n(), begin = min(when), end = max(when), avg_temp = mean(temperature))
-
-daily <- whately %>%
-  mutate(the_date = date(when)) %>%
-  group_by(the_date) %>%
-  summarize(N = n(), avgTemp = mean(temperature)) %>%
-  collect()
-```
-
-```{r}
+orchard_data <-collect(orchard)
+whately_data <- collect(whately)
 sap <- macleish::maple_sap
+forests <- macleish_layers[["forests"]]
 ```
 
 ```{r}
-daily_update <- daily %>%
-  rename("when"="the_date")
+#What types of maple forests are there? Where are they?
 
-sap %>%
-  left_join(daily_update, by= "when")
+forests <- forests%>%
+  rename("forest_type"="Sheet1__Na")%>%
+  mutate(area= st_area(forests))
+```
+
+```{r}
+forest_areas <- forests %>%
+  group_by(forest_type)%>%
+  summarise(total_area= sum(area))%>%
+  filter(str_detect(forest_type, "Maple"))
+
+
+leaflet()%>%
+  addTiles()%>%
+  addPolygons(data=forest_areas)
+  
 ```
