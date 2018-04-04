@@ -42,3 +42,10 @@ daily <- whately %>%
 sap <- macleish::maple_sap
 ```
 
+```{r}
+daily_update <- daily %>%
+  rename("when"="the_date")
+
+sap %>%
+  left_join(daily_update, by= "when")
+```
