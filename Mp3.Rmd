@@ -13,6 +13,24 @@ library(macleish)
 ```
 
 ```{r}
+#Attaining the orchard live weather data from Professor Baumer's R package (this part is not our code)
+macleish <- etl("macleish")
+macleish %>%
+  etl_update()
+whately <- macleish %>%
+  tbl("whately")
+whately %>%
+  mutate(the_year = strftime('%Y', when)) %>%
+  group_by(the_year) %>%
+  summarize(N = n(), begin = min(when), end = max(when), avg_temp = mean(temperature))
+orchard <- macleish %>%
+  tbl("orchard")
+orchard %>%
+  mutate(the_year = strftime('%Y', when)) %>%
+  group_by(the_year) %>%
+  summarize(N = n(), begin = min(when), end = max(when), avg_temp = mean(temperature))
+
+#Collecting the wild not-data sets that orchard and whately are, getting the sap data and the forest data (this part is our code)
 orchard_data <-collect(orchard)
 whately_data <- collect(whately)
 sap <- macleish::maple_sap
@@ -44,3 +62,15 @@ leaflet()%>%
   addPolygons(data=forest_areas, color= ~fm_pal(forest_type))
   
 ```
+
+```{r}
+#Wrangling the orchard and whately data
+
+orchard_data$Date <- format(as.POSIXct(orchard_data$when, format= "%Y-%m-%dT%H:%M:%SZ"), "%Y-%m-%d")
+orchard_data$Time <- format(as.POSIXct(orchard_data$when, format="%Y-%m-%dT%H:%M:%SZ"), "%H:%M:%S")
+whately_data$Date <- format(as.POSIXct(whately_data$when,format=("%Y-%m-%dT%H:%M:%SZ")),"%Y-%m-%d")
+whately_data$Time <- format(as.POSIXct(whately_data$when, format="%Y-%m-%dT%H:%M:%SZ"), "%H:%M:%S")
+```
+
+```{r}
+#more wrangling
