@@ -122,8 +122,30 @@ ideal_days <- function(name_arg) {
   Day_weather(name_arg)%>%
     inner_join(Night_weather(name_arg), by = c("Year", "Month", "Day"))
 }
-  
-```
-```{r}
 
+```
+
+```{r}
+#using those functions
+
+Whately_Weather <- ideal_days(whately_data)
+
+#the orchard weather is really only for ground temperatures and in the middle of a field, whearas the whately station is in the forest and gets readings from the air so it's more useful. 
+Orchard_Weather <- ideal_days(orchard_data)
+
+```
+
+```{r}
+#wrangling the sap data a bit
+
+sap$Year <- format(as.POSIXct(sap$when, format= "%Y-%m-%d"), "%Y")
+sap$Month <- format(as.POSIXct(sap$when, format="%Y-%m-%d"), "%m")
+sap$Day <- format(as.POSIXct(sap$when, format="%Y-%m-%d"), "%d")
+
+Sap <- sap %>%
+  rename("Sap_in_gal"="sap")%>%
+  select(Sap_in_gal, Year:Day)
+
+WW_and_Sap <- Whately_Weather %>%
+  left_join(Sap, by = c("Year", "Month", "Day"))
 ```
