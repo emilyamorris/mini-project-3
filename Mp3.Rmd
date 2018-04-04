@@ -2,17 +2,19 @@
 title: "Mini_project_3"
 author: "Emily M., Sylvie L., and Hannah R.D."
 date: "April 3, 2018"
-output: html_document
+output: 
+  html_document:
+    code_folding: hide
 ---
 
-```{r}
+```{r warning= FALSE, message= FALSE}
 library(tidyverse)
 library(leaflet)
 library(sf)
 library(macleish)
 ```
 
-```{r}
+```{r warning= FALSE, message= FALSE}
 #Attaining the orchard live weather data from Professor Baumer's R package (this part is not our code)
 macleish <- etl("macleish")
 macleish %>%
@@ -37,7 +39,7 @@ sap <- macleish::maple_sap
 forests <- macleish_layers[["forests"]]
 ```
 
-```{r}
+```{r warning= FALSE, message= FALSE}
 #What types of maple forests are there? Where are they?
 
 forests <- forests%>%
@@ -64,7 +66,7 @@ leaflet()%>%
   
 ```
 
-```{r}
+```{r warning= FALSE, message= FALSE}
 #Wrangling the orchard and whately data
 
 orchard_data$Date <- format(as.POSIXct(orchard_data$when, format= "%Y-%m-%dT%H:%M:%SZ"), "%Y-%m-%d")
@@ -80,7 +82,7 @@ whately_data$Day <- format(as.POSIXct(whately_data$when,format=("%Y-%m-%dT%H:%M:
 whately_data$Time <- format(as.POSIXct(whately_data$when, format="%Y-%m-%dT%H:%M:%SZ"), "%H.%M%S")
 ```
 
-```{r}
+```{r warning= FALSE, message= FALSE}
 #more wrangling
 
 Night_weather <- function(name_arg){
@@ -126,7 +128,7 @@ ideal_days <- function(name_arg) {
 
 ```
 
-```{r}
+```{r warning= FALSE, message= FALSE}
 #using those functions
 
 Whately_Weather <- ideal_days(whately_data)
@@ -136,7 +138,7 @@ Orchard_Weather <- ideal_days(orchard_data)
 
 ```
 
-```{r}
+```{r warning= FALSE, message= FALSE}
 #wrangling the sap data a bit
 
 sap$Year <- format(as.POSIXct(sap$when, format= "%Y-%m-%d"), "%Y")
