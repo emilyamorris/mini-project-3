@@ -67,10 +67,63 @@ leaflet()%>%
 #Wrangling the orchard and whately data
 
 orchard_data$Date <- format(as.POSIXct(orchard_data$when, format= "%Y-%m-%dT%H:%M:%SZ"), "%Y-%m-%d")
-orchard_data$Time <- format(as.POSIXct(orchard_data$when, format="%Y-%m-%dT%H:%M:%SZ"), "%H:%M:%S")
-whately_data$Date <- format(as.POSIXct(whately_data$when,format=("%Y-%m-%dT%H:%M:%SZ")),"%Y-%m-%d")
-whately_data$Time <- format(as.POSIXct(whately_data$when, format="%Y-%m-%dT%H:%M:%SZ"), "%H:%M:%S")
+orchard_data$Year <- format(as.POSIXct(orchard_data$when, format= "%Y-%m-%dT%H:%M:%SZ"), "%Y")
+orchard_data$Month <- format(as.POSIXct(orchard_data$when, format="%Y-%m-%dT%H:%M:%SZ"), "%m")
+orchard_data$Day <- format(as.POSIXct(orchard_data$when, format="%Y-%m-%dT%H:%M:%SZ"), "%d")
+orchard_data$Time <- format(as.POSIXct(orchard_data$when, format="%Y-%m-%dT%H:%M:%SZ"), "%H.%M%S")
+
+whately_data$Date <- format(as.POSIXct(whately_data$when, format= "%Y-%m-%dT%H:%M:%SZ"), "%Y-%m-%d")
+whately_data$Year <- format(as.POSIXct(whately_data$when,format=("%Y-%m-%dT%H:%M:%SZ")),"%Y")
+whately_data$Month <- format(as.POSIXct(whately_data$when,format=("%Y-%m-%dT%H:%M:%SZ")),"%m")
+whately_data$Day <- format(as.POSIXct(whately_data$when,format=("%Y-%m-%dT%H:%M:%SZ")),"%d")
+whately_data$Time <- format(as.POSIXct(whately_data$when, format="%Y-%m-%dT%H:%M:%SZ"), "%H.%M%S")
 ```
 
 ```{r}
 #more wrangling
+
+Night_weather <- function(name_arg){
+  na.omit(name_arg)%>%
+  transform(temperature= as.numeric(temperature),
+            wind_speed= as.numeric(wind_speed),
+            wind_dir = as.numeric(wind_dir),
+            rel_humidity= as.numeric(rel_humidity),
+            pressure= as.numeric(pressure))%>%
+  filter(Time< 6|Time > 18)%>%
+  select(temperature:Day)%>%
+  group_by(Year, Month, Day)%>%
+  summarise(min_night_temp = min(temperature),
+            night_wind_speed = mean(wind_speed),
+            night_wind_dir = mean(wind_dir),
+            night_rel_humidity = mean(rel_humidity),
+            night_pressure = mean(pressure))%>%
+    filter(min_night_temp < 0)
+}
+
+Day_weather <- function(name_arg){
+  na.omit(name_arg)%>%
+  transform(temperature= as.numeric(temperature),
+            wind_speed= as.numeric(wind_speed),
+            wind_dir = as.numeric(wind_dir),
+            rel_humidity= as.numeric(rel_humidity),
+            pressure= as.numeric(pressure))%>%
+  filter(Time>6|Time<18)%>%
+  select(temperature:Day)%>%
+  group_by(Year, Month, Day)%>%
+  summarise(max_day_temp = max(temperature),
+            day_wind_speed = mean(wind_speed),
+            day_wind_dir = mean(wind_dir),
+            day_rel_humidity = mean(rel_humidity),
+            day_pressure = mean(pressure))%>%
+    filter(max_day_temp > 0)
+}
+
+ideal_days <- function(name_arg) {
+  Day_weather(name_arg)%>%
+    inner_join(Night_weather(name_arg), by = c("Year", "Month", "Day"))
+}
+  
+```
+```{r}
+
+```
