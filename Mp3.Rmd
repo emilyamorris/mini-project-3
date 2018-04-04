@@ -59,7 +59,8 @@ fm_pal <- colorFactor(
 
 leaflet()%>%
   addTiles()%>%
-  addPolygons(data=forest_areas, color= ~fm_pal(forest_type))
+  addPolygons(data=forest_areas, color= ~fm_pal(forest_type))%>%
+  addMarkers(lng= -72.68055556, lat = 42.44888889, label= "Whately Monitoring Station")
   
 ```
 
