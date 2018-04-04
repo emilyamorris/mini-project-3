@@ -1,6 +1,6 @@
 ---
 title: "Mini_project_3"
-author: "Emily Morris"
+author: "Emily M., Sylvie L., and Hannah R.D."
 date: "April 3, 2018"
 output: html_document
 ---
@@ -25,17 +25,22 @@ forests <- macleish_layers[["forests"]]
 forests <- forests%>%
   rename("forest_type"="Sheet1__Na")%>%
   mutate(area= st_area(forests))
-```
 
-```{r}
 forest_areas <- forests %>%
   group_by(forest_type)%>%
   summarise(total_area= sum(area))%>%
   filter(str_detect(forest_type, "Maple"))
 
+#Making a palette for the two types of Maple forests
+fm_pal <- colorFactor(
+  palette= c('#42f47a', '#137a33'),
+  domain= forest_areas$forest_type
+)
+
+#Leaflet plot to map where the maple forests are
 
 leaflet()%>%
   addTiles()%>%
-  addPolygons(data=forest_areas)
+  addPolygons(data=forest_areas, color= ~fm_pal(forest_type))
   
 ```
