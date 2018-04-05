@@ -12,6 +12,7 @@ library(tidyverse)
 library(leaflet)
 library(sf)
 library(macleish)
+library(ggplot2)
 ```
 
 ```{r warning= FALSE, message= FALSE}
@@ -151,4 +152,44 @@ Sap <- sap %>%
 
 WW_and_Sap <- Whately_Weather %>%
   left_join(Sap, by = c("Year", "Month", "Day"))
+
+WW_and_Sap$Date <- as.Date(with(WW_and_Sap, paste(Year, Month, Day, sep= "-")), "%Y-%m-%d")
+
+#editing data so we can see trends
+WW_and_Sap_Summary <- WW_and_Sap %>%
+  group_by(Year, Month)%>%
+  summarise(total_days= n())
+
+Months_of_Sap <- WW_and_Sap_Summary%>%
+  mutate(Month = recode(Month, "01"="January", "02"="February", "03"="March", "04"="April", "10"="October", "11"="November", "12"="December"))
+
+Spring_sap <- Months_of_Sap %>%
+  filter(Month== "January"|Month=="February"|Month=="March"|Month=="April")
+  
+```
+
+```{r warning=FALSE, message= FALSE}
+#plotting to see some trends
+ggplot(WW_and_Sap_Summary, aes(x= Year, y=total_days ))+
+  geom_point()+
+  facet_wrap(~Month)
+
+ggplot(WW_and_Sap_Summary, aes(x= Month, y= total_days))+
+  geom_point()+
+  facet_wrap(~Year)
+
+ggplot(Spring_sap, aes(x=Month, y= total_days, color= Year))+
+  geom_point()+
+  geom_line(aes(group=Year))+
+  scale_x_discrete(limits=c("January","February","March","April"))
+
+
+months <- function(name_arg){
+  Spring_sap%>%
+    filter(Month== name_arg)%>%
+    ggplot(aes(x=Year, y= total_days))+
+  geom_point()
+}
+  
+months("January")
 ```
