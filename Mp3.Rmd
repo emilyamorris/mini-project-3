@@ -193,3 +193,61 @@ months <- function(name_arg){
   
 months("January")
 ```
+
+```{r warning= FALSE, message= FALSE}
+#OK so i want to map the days in a month that are reasonable out of the total days in that month versus time so I'm rewriting these functions so I can do that
+
+Night_weather_all <- function(name_arg){
+  na.omit(name_arg)%>%
+  transform(temperature= as.numeric(temperature),
+            wind_speed= as.numeric(wind_speed),
+            wind_dir = as.numeric(wind_dir),
+            rel_humidity= as.numeric(rel_humidity),
+            pressure= as.numeric(pressure))%>%
+  filter(Time< 6|Time > 18, Month== "01"|Month== "02"|Month=="03"|Month=="04")%>%
+  select(temperature:Day)%>%
+  group_by(Year, Month, Day)%>%
+  summarise(min_night_temp = min(temperature),
+            night_wind_speed = mean(wind_speed),
+            night_wind_dir = mean(wind_dir),
+            night_rel_humidity = mean(rel_humidity),
+            night_pressure = mean(pressure))%>%
+    filter(Month < 5)%>%
+    mutate(correct_night_temp= ifelse(min_night_temp <0, 1, 0))
+}
+
+Day_weather_all <- function(name_arg){
+  na.omit(name_arg)%>%
+  transform(temperature= as.numeric(temperature),
+            wind_speed= as.numeric(wind_speed),
+            wind_dir = as.numeric(wind_dir),
+            rel_humidity= as.numeric(rel_humidity),
+            pressure= as.numeric(pressure))%>%
+  filter(Time>6|Time<18, Month== "01"|Month== "02"|Month=="03"|Month=="04")%>%
+  select(temperature:Day)%>%
+  group_by(Year, Month, Day)%>%
+  summarise(max_day_temp = max(temperature),
+            day_wind_speed = mean(wind_speed),
+            day_wind_dir = mean(wind_dir),
+            day_rel_humidity = mean(rel_humidity),
+            day_pressure = mean(pressure))%>%
+    mutate(correct_day_temp= ifelse(max_day_temp>0, 1, 0))
+}
+
+all_days <- function(name_arg) {
+  Day_weather_all(name_arg)%>%
+    inner_join(Night_weather_all(name_arg), by = c("Year", "Month", "Day"))%>%
+    mutate(temp_total = correct_night_temp+ correct_day_temp,
+           correct_temp = ifelse(temp_total == 2, "TRUE", "FALSE")) %>%
+    select(Year:correct_temp, -correct_night_temp, -correct_day_temp, -temp_total)%>%
+    mutate(DATE = as.Date(paste(Year, Month, Day, sep= '-'), "%Y-%m-%d"))
+    
+}
+
+```
+
+```{r warning= FALSE, message= FALSE}
+weather_and_all_possible_days <- all_days(whately_data)
+```
+
+```{r warning= FALSE, message= FALSE}
