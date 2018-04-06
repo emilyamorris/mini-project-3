@@ -239,7 +239,7 @@ all_days <- function(name_arg) {
     inner_join(Night_weather_all(name_arg), by = c("Year", "Month", "Day"))%>%
     mutate(temp_total = correct_night_temp+ correct_day_temp,
            correct_temp = ifelse(temp_total == 2, "TRUE", "FALSE")) %>%
-    select(Year:correct_temp, -correct_night_temp, -correct_day_temp, -temp_total)%>%
+    select(Year:correct_temp, -correct_night_temp, -correct_day_temp)%>%
     mutate(DATE = as.Date(paste(Year, Month, Day, sep= '-'), "%Y-%m-%d"))
     
 }
@@ -251,3 +251,15 @@ weather_and_all_possible_days <- all_days(whately_data)
 ```
 
 ```{r warning= FALSE, message= FALSE}
+
+#devtools::install_github("jayjacobs/ggcal")
+library(ggcal)
+```
+
+```{r warning= FALSE, message= FALSE}
+mydate <- seq(as.Date("2017-02-01"), as.Date("2017-07-22"), by="1 day")
+myfills <- rnorm(length(mydate))
+
+print(ggcal(mydate, myfills))
+
+```
