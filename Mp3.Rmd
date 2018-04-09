@@ -251,21 +251,39 @@ weather_and_all_possible_days <- all_days(whately_data)
 ```
 
 ```{r warning= FALSE, message= FALSE}
-
-devtools::install_github('davidcarslaw/openair')
+#package needed to make calendar plots
+#devtools::install_github('davidcarslaw/openair')
 ```
 
 ```{r warning= FALSE, message= FALSE}
+#making calendar plot function
 library(openair)
 
+```
+
+```{r warning= FALSe, message= FALSE}
+#adding the days of sap collection onto the weather_and_all_possible days
+
+sap <- sap %>%
+  rename("date"="when")
+
+possible_and_actual_sap_days <- weather_and_all_possible_days %>%
+  left_join(sap, by= "date")
+
+```
+
+```{r warning=FALSE, message= FALSE}
 Plot_months <- function(name_arg){
-  calendarPlot(weather_and_all_possible_days, pollutant= "temp_total", year= name_arg, breaks= c(0, 1, 2), labels= c("Incorrect Temperature Ranges", "Correct Temperature Ranges"), cols= c("#d5f2f0", "#45e05f"))
+  calendarPlot(possible_and_actual_sap_days, pollutant= "temp_total", year= name_arg, breaks= c(0, 1, 2), labels= c("Incorrect Temperature Ranges", "Correct Temperature Ranges"), cols= c("#d5f2f0", "#45e05f"))
 }
 
+
+Plot_months(2014)
+```
+
+```{r warning= FALSE, message= FALSE}
 list_of_years <- list(2012, 2013, 2014, 2015, 2016, 2017)
 
-all_year_plot <- lapply(list_of_years, Plot_months)
-
-print(all_year_plot)
+lapply(list_of_years, Plot_months)
 ```
 
