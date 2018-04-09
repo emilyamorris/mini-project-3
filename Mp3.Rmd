@@ -240,7 +240,7 @@ all_days <- function(name_arg) {
     mutate(temp_total = correct_night_temp+ correct_day_temp,
            correct_temp = ifelse(temp_total == 2, "TRUE", "FALSE")) %>%
     select(Year:correct_temp, -correct_night_temp, -correct_day_temp)%>%
-    mutate(DATE = as.Date(paste(Year, Month, Day, sep= '-'), "%Y-%m-%d"))
+    mutate(date = as.Date(paste(Year, Month, Day, sep= '-'), "%Y-%m-%d"))
     
 }
 
@@ -252,14 +252,20 @@ weather_and_all_possible_days <- all_days(whately_data)
 
 ```{r warning= FALSE, message= FALSE}
 
-#devtools::install_github("jayjacobs/ggcal")
-library(ggcal)
+devtools::install_github('davidcarslaw/openair')
 ```
 
 ```{r warning= FALSE, message= FALSE}
-mydate <- seq(as.Date("2017-02-01"), as.Date("2017-07-22"), by="1 day")
-myfills <- rnorm(length(mydate))
+library(openair)
 
-print(ggcal(mydate, myfills))
+Plot_months <- function(name_arg){
+  calendarPlot(weather_and_all_possible_days, pollutant= "temp_total", year= name_arg, breaks= c(0, 1, 2), labels= c("Incorrect Temperature Ranges", "Correct Temperature Ranges"), cols= c("#d5f2f0", "#45e05f"))
+}
 
+list_of_years <- list(2012, 2013, 2014, 2015, 2016, 2017)
+
+all_year_plot <- lapply(list_of_years, Plot_months)
+
+print(all_year_plot)
 ```
+
