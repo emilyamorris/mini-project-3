@@ -15,7 +15,7 @@ library(macleish)
 library(ggplot2)
 ```
 
-```{r warning= FALSE, message= FALSE}
+```{r warning= FALSE, message= FALSE, results= 'hide'}
 #Attaining the orchard live weather data from Professor Baumer's R package (this part is not our code)
 macleish <- etl("macleish")
 macleish %>%
@@ -40,7 +40,7 @@ sap <- macleish::maple_sap
 forests <- macleish_layers[["forests"]]
 ```
 
-```{r warning= FALSE, message= FALSE,  fig.width=10, fig.height= 10}
+```{r warning= FALSE, message= FALSE,  fig.width=8, fig.height= 8}
 #What types of maple forests are there? Where are they?
 
 forests <- forests%>%
@@ -168,7 +168,7 @@ Spring_sap <- Months_of_Sap %>%
   
 ```
 
-```{r warning=FALSE, message= FALSE, fig.width=20, fig.height= 10}
+```{r warning=FALSE, message= FALSE, fig.width=20, fig.height= 7}
 #plotting to see some trends-- number of days sap was collected per month
 
 ggplot(Spring_sap, aes(x=Month, y= total_days, color= Year))+
@@ -266,7 +266,7 @@ plot_calendars <- function(name_arg){
 }
 ```
 
-```{r warning= FALSE, message= FALSE, fig.width=20, fig.height= 10}
+```{r warning= FALSE, message= FALSE, fig.width=20, fig.height= 7}
 #plotting all the years as calendars
 
 Plot_months(2012)
