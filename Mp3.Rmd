@@ -40,7 +40,7 @@ sap <- macleish::maple_sap
 forests <- macleish_layers[["forests"]]
 ```
 
-```{r warning= FALSE, message= FALSE}
+```{r warning= FALSE, message= FALSE,  fig.width=10, fig.height= 10}
 #What types of maple forests are there? Where are they?
 
 forests <- forests%>%
@@ -168,30 +168,14 @@ Spring_sap <- Months_of_Sap %>%
   
 ```
 
-```{r warning=FALSE, message= FALSE}
-#plotting to see some trends
-ggplot(WW_and_Sap_Summary, aes(x= Year, y=total_days ))+
-  geom_point()+
-  facet_wrap(~Month)
-
-ggplot(WW_and_Sap_Summary, aes(x= Month, y= total_days))+
-  geom_point()+
-  facet_wrap(~Year)
+```{r warning=FALSE, message= FALSE, fig.width=20, fig.height= 10}
+#plotting to see some trends-- number of days sap was collected per month
 
 ggplot(Spring_sap, aes(x=Month, y= total_days, color= Year))+
   geom_point()+
   geom_line(aes(group=Year))+
   scale_x_discrete(limits=c("January","February","March","April"))
 
-
-months <- function(name_arg){
-  Spring_sap%>%
-    filter(Month== name_arg)%>%
-    ggplot(aes(x=Year, y= total_days))+
-  geom_point()
-}
-  
-months("January")
 ```
 
 ```{r warning= FALSE, message= FALSE}
@@ -248,30 +232,20 @@ all_days <- function(name_arg) {
 
 ```{r warning= FALSE, message= FALSE}
 weather_and_all_possible_days <- all_days(whately_data)
-```
 
-```{r warning= FALSE, message= FALSE}
 #package needed to make calendar plots
 #devtools::install_github('davidcarslaw/openair')
-```
 
-```{r warning= FALSE, message= FALSE}
 #making calendar plot function
 library(openair)
 
-```
-
-```{r warning= FALSe, message= FALSE}
 #adding the days of sap collection onto the weather_and_all_possible days
 
-sap <- macleish::maple_sap
-
-sap_gals <- sap%>%
+sap_gals <- sap %>%
   rename("date"="when", "sap_gals"="sap")
 
 possible_and_actual_sap_days <- weather_and_all_possible_days %>%
   left_join(sap_gals, by= "date")%>%
-  select(Year:sap_gals)%>%
   replace_na(list(sap_gals= 0))
 
 ```
@@ -287,15 +261,19 @@ Plot_actual_sap <- function(name_arg){
 }
 
 plot_calendars <- function(name_arg){
-  par(mfrow=c(1, 2))
   Plot_months(name_arg)
   Plot_actual_sap(name_arg)
 }
 ```
 
-```{r warning= FALSE, message= FALSE}
-list_of_years <- list(2012, 2013, 2014, 2015, 2016, 2017)
+```{r warning= FALSE, message= FALSE, fig.width=20, fig.height= 10}
+#plotting all the years as calendars
 
-lapply(list_of_years, plot_calendars)
+Plot_months(2012)
+plot_calendars(2013)
+plot_calendars(2014)
+plot_calendars(2015)
+Plot_months(2016)
+plot_calendars(2017)
 ```
 
