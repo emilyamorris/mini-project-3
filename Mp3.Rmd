@@ -283,4 +283,6 @@ calendarPlot(possible_and_actual_sap_days, pollutant= "sap_gals", breaks= c(0, 1
 
 
 ```
+Link to our GitHub Repository[^1]
 
+[^1]:https://github.com/emilyamorris/mini-project-3
