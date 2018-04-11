@@ -8,6 +8,8 @@ output:
     theme: cerulean
 ---
 
+#TITLEEEE and FANCY INTRO 
+
 ```{r warning= FALSE, message= FALSE}
 library(tidyverse)
 library(leaflet)
@@ -42,6 +44,8 @@ sap <- macleish::maple_sap
 forests <- macleish_layers[["forests"]]
 ```
 
+#HERE IS THE MAP OF ORCHARDS AND WHATELY
+
 ```{r warning= FALSE, message= FALSE,  fig.width=8, fig.height= 3, fig.align="center"}
 #What types of maple forests are there? Where are they?
 
@@ -68,6 +72,7 @@ leaflet()%>%
   addMarkers(lng= -72.68055556, lat = 42.44888889, label= "Whately Monitoring Station")
   
 ```
+#SOME BACKGROUND
 
 ```{r warning= FALSE, message= FALSE}
 #Wrangling the orchard and whately data
@@ -170,6 +175,8 @@ Spring_sap <- Months_of_Sap %>%
   
 ```
 
+#PLOTTIN THEM TRENDS
+
 ```{r warning=FALSE, message= FALSE, fig.width=10, fig.height= 7, fig.align="center"}
 #plotting to see some trends-- number of days sap was collected per month
 
@@ -184,6 +191,8 @@ ggplot(Spring_sap, aes(x=Month, y= total_days, color= Year))+
   labs(title= "Possible Sap Collection Days versus Months of Spring", subtitle= "With changes by year")
 
 ```
+
+#DO THESE AGREE WITH CLIMATE CHANGE????? PROBABLY IDK BUT WE SHOULD PUT SOME INFO AND SOME PICS HERE
 
 ```{r warning= FALSE, message= FALSE}
 #OK so i want to map the days in a month that are reasonable out of the total days in that month versus time so I'm rewriting these functions so I can do that
@@ -257,6 +266,8 @@ possible_and_actual_sap_days <- weather_and_all_possible_days %>%
 
 ```
 
+#PLOTTIN MORE TRENDS YA'LL BUT THIS TIME WITH CALENDARS AND REAL SAP
+
 ```{r warning= FALSE, message= FALSE, fig.show= "hold", fig.width=20, fig.height= 7, fig.align="center"}
 #plotting all the years as calendars--can't use a function because calendarPlot doesn't allow you to add individual titles to things the way ggplot does, so either all the plots wouldn't have years signfied in their titles or we can just use the same code a few times. For clarity-sake we decided not to use a function (even though we tried)
 
@@ -284,6 +295,11 @@ calendarPlot(possible_and_actual_sap_days, pollutant= "sap_gals", breaks= c(0, 1
 
 
 ```
+
+#SHOULD PROBABLY PUT SOME CONCLUSIONS RIGHT HERE
+
+#SUGGESTIONS FOR THE MACLEISH PEEPS
+
 Link to our GitHub Repository[^1]
 
 <<<<<<< HEAD
