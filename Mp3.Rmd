@@ -1,11 +1,11 @@
 ---
-title: "Mini_project_3"
+title: "Maple Syrup"
 author: "Emily M., Sylvie L., and Hannah R.D."
 date: "April 3, 2018"
 output: 
   html_document:
     code_folding: hide
-    theme: spacelab
+    theme: cerulean
 ---
 
 ```{r warning= FALSE, message= FALSE}
@@ -42,7 +42,7 @@ sap <- macleish::maple_sap
 forests <- macleish_layers[["forests"]]
 ```
 
-```{r warning= FALSE, message= FALSE,  fig.width=8, fig.height= 3}
+```{r warning= FALSE, message= FALSE,  fig.width=8, fig.height= 3, fig.align="center"}
 #What types of maple forests are there? Where are they?
 
 forests <- forests%>%
@@ -170,7 +170,7 @@ Spring_sap <- Months_of_Sap %>%
   
 ```
 
-```{r warning=FALSE, message= FALSE, fig.width=15, fig.height= 7}
+```{r warning=FALSE, message= FALSE, fig.width=10, fig.height= 7, fig.align="center"}
 #plotting to see some trends-- number of days sap was collected per month
 
 ggplot(Spring_sap, aes(x=Month, y= total_days, color= Year))+
@@ -257,7 +257,7 @@ possible_and_actual_sap_days <- weather_and_all_possible_days %>%
 
 ```
 
-```{r warning= FALSE, message= FALSE, fig.show= "hold", fig.width=20, fig.height= 7}
+```{r warning= FALSE, message= FALSE, fig.show= "hold", fig.width=20, fig.height= 7, fig.align="center"}
 #plotting all the years as calendars--can't use a function because calendarPlot doesn't allow you to add individual titles to things the way ggplot does, so either all the plots wouldn't have years signfied in their titles or we can just use the same code a few times. For clarity-sake we decided not to use a function (even though we tried)
 
 #2012
