@@ -42,7 +42,7 @@ sap <- macleish::maple_sap
 forests <- macleish_layers[["forests"]]
 ```
 
-```{r warning= FALSE, message= FALSE,  fig.width=8, fig.height= 5}
+```{r warning= FALSE, message= FALSE,  fig.width=8, fig.height= 3}
 #What types of maple forests are there? Where are they?
 
 forests <- forests%>%
@@ -178,9 +178,10 @@ ggplot(Spring_sap, aes(x=Month, y= total_days, color= Year))+
   geom_line(aes(group=Year))+
   scale_x_discrete(limits=c("January","February","March","April"))+
   xlab("Month")+
-  ylab("Total Number of Days on Which Sap was Collected (by year)")+
+  ylab("Total Number of Days on Which Could Be Collected (by year)")+
   theme_economist()+
-  labs(title= "Sap Collection Days versus Months of Spring", subtitle= "With changes by year")
+  scale_color_brewer(palette="YlGnBu")+
+  labs(title= "Possible Sap Collection Days versus Months of Spring", subtitle= "With changes by year")
 
 ```
 
@@ -283,4 +284,7 @@ calendarPlot(possible_and_actual_sap_days, pollutant= "sap_gals", breaks= c(0, 1
 
 
 ```
+
+
+![](http://thumbpress.com/wp-content/uploads/2016/02/cool-wine-bottle-Canada-maple-syrup.jpg)
 
