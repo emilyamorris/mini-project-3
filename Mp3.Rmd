@@ -5,7 +5,7 @@ date: "April 3, 2018"
 output: 
   html_document:
     code_folding: hide
-    theme: lux
+    theme: spacelab
 ---
 
 ```{r warning= FALSE, message= FALSE}
