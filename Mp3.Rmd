@@ -9,6 +9,7 @@ output:
     theme: cerulean
 ---
 
+
 #TITLEEEE and FANCY INTRO 
 Sugar maple trees, Acer saccharum, are a vital part of the economic and ecological systems of Massachusetts and the northeastern United States. Maple sap is collected and boiled down into syrup to create a valuable commodity for the state. 
 Maple sap production requires a delicate balance of weather conditions that are only achieved during “sugaring season”, or the spring season in temperate areas. Specifically, the temperature fluctuations must be such that the temperature is above freezing (32 degrees fahrenheit) during the day, and below freezing at night. 
