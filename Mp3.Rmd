@@ -10,6 +10,8 @@ output:
 
 #TITLEEEE and FANCY INTRO 
 
+![treebeard is done with your bs](https://static.comicvine.com/uploads/scale_medium/12/128795/3643962-elder+ent+3+by+moonxels.jpg)
+
 ```{r warning= FALSE, message= FALSE}
 library(tidyverse)
 library(leaflet)
@@ -18,6 +20,12 @@ library(macleish)
 library(ggplot2)
 library(ggthemes)
 ```
+
+  Sugar maple trees, *Acer saccharum*, are a vital part of the economic and ecological systems of Massachusetts and the northeastern United States. Maple sap is collected and boiled down into syrup to create a valuable commodity for the state. 
+Maple sap production requires a delicate balance of weather conditions that are only achieved during “sugaring season”, or the spring season in temperate areas. Specifically, the temperature fluctuations must be such that the temperature is above freezing (32 degrees fahrenheit) during the day, and below freezing at night. 
+  Global climate change stands to have a significant impact on maple tree function and distribution within the coming years. Tree availability and health as well as timing and length of the tapping season are among the most vulnerable factors in the sugaring industry. Fluctuations in climatic temperature and other conditions could lead to altered suitability of habitat and reductions in maple distribution in most of the United States by 2100. 
+Tree health could be negatively impacted by acid rain, insect pests, and other ailments. The stress of surviving one ailment makes the tree more susceptible to other stressors; this lessens the likelihood of tree survival in the face of climate change. As more trees die off and the habitat becomes increasingly warped, tree distribution will continue to shrink.
+
 
 ```{r warning= FALSE, message= FALSE, results= 'hide'}
 #Attaining the orchard live weather data from Professor Baumer's R package (this part is not our code)
@@ -192,6 +200,8 @@ ggplot(Spring_sap, aes(x=Month, y= total_days, color= Year))+
 
 ```
 
+  Pictured below is the total number of days on which sap could be collected plotted against typical sugaring season months. It can be seen that the number of possible collection days increases in more recent years in months that previously would have been too cold to tap in, primarily January and February. Since tapping requires temperatures above freezing during the day, this graph--along with other factors--is indicative of a warming climate. 
+
 #DO THESE AGREE WITH CLIMATE CHANGE????? PROBABLY IDK BUT WE SHOULD PUT SOME INFO AND SOME PICS HERE
 
 ```{r warning= FALSE, message= FALSE}
@@ -295,6 +305,12 @@ calendarPlot(possible_and_actual_sap_days, pollutant= "sap_gals", breaks= c(0, 1
 
 
 ```
+
+  Smith College has the opportunity to ameliorate maple loss in a variety of ways. One option could be the creation and careful maintenance of a maple stand on the MacLeish Field Station property. Student labor could significantly cut costs for planting and routine maintenance, though the college would still be responsible for purchasing the original plants and other associated costs. Acer saccharum tend to reach maturity at 20 to 30 years of age and can grow to be 300 or even 400 years old. If new generations are planted to replace those lost, the project could continue indefinitely. Smith could also create a project much like that of the American Chestnut, wherein sugar maples could be initially bred with more hardy stocks and crossed back to almost genetic purity. This endeavor would be comparable with that of the American Chestnut project, presumably both in time and cost. 
+  The greatest roadblock would probably be that of maintaining the maple copse well into the future. Unless an effort is actively made to continue and evolve the project, it could fall into disuse and the maples could die off.
+  The hope is that this maple project would have a net positive effect on the local environment. Sugar maple trees are already a well established species in our local ecosystems, and therefore do not pose the threat of becoming an invasive species. The creation of maple forest could create a small carbon sink, and would not be as difficult to maintain as the vast swaths of pasture MacLeish currently has.
+
+
 
 #SHOULD PROBABLY PUT SOME CONCLUSIONS RIGHT HERE
 
