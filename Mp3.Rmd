@@ -319,8 +319,14 @@ calendarPlot(possible_and_actual_sap_days, pollutant= "sap_gals", breaks= c(0, 1
 #SUGGESTIONS FOR THE MACLEISH PEEPS
 
 Link to our GitHub Repository[^1]
+Works Cited[^2]
 
 ![](http://thumbpress.com/wp-content/uploads/2016/02/cool-wine-bottle-Canada-maple-syrup.jpg){#id .class width=2in height=3in}
 
 =======
 [^1]:https://github.com/emilyamorris/mini-project-3
+[^2]:Works Cited 
+Rapp, Joshua. “Climate Impacts.” ACERnet, Dept. of Environmental Conservation UMass Amherst, 7 Dec. 2015, blogs.umass.edu/acernet/climate-impacts/. Accessed 13 Apr. 2018.
+Schoenfuss, Amanda. “The Life History and Reproduction of Acer saccharum.” Sugar Maple: Acer saccharum, 2010, bioweb.uwlax.edu/bio203/2010/schoenfu_aman/reproduction.htm. Accessed 13 Apr. 2018.
+
+
