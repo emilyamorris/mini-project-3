@@ -9,19 +9,19 @@ output:
     theme: cerulean
 ---
 
-
-#TITLEEEE and FANCY INTRO 
-Sugar maple trees, Acer saccharum, are a vital part of the economic and ecological systems of Massachusetts and the northeastern United States. Maple sap is collected and boiled down into syrup to create a valuable commodity for the state. 
-Maple sap production requires a delicate balance of weather conditions that are only achieved during “sugaring season”, or the spring season in temperate areas. Specifically, the temperature fluctuations must be such that the temperature is above freezing (32 degrees fahrenheit) during the day, and below freezing at night. 
-Global climate change stands to have a significant impact on maple tree function and distribution within the coming years. Tree availability and health as well as timing and length of the tapping season are among the most vulnerable factors in the sugaring industry. Fluctuations in climatic temperature and other conditions could lead to altered suitability of habitat and reductions in maple distribution in most of the United States by 2100. 
-Tree health could be negatively impacted by acid rain, insect pests, and other ailments. The stress of surviving one ailment makes the tree more susceptible to other stressors; this lessens the likelihood of tree survival in the face of climate change. As more trees die off and the habitat becomes increasingly warped, tree distribution will continue to shrink.
-Smith College has the opportunity to ameliorate maple loss in a variety of ways. One option could be the creation and careful maintenance of a maple stand on the MacLeish Field Station property. Student labor could significantly cut costs for planting and routine maintenance, though the college would still be responsible for purchasing the original plants and other associated costs. Acer saccharum tend to reach maturity at 20 to 30 years of age and can grow to be 300 or even 400 years old. If new generations are planted to replace those lost, the project could continue indefinitely. Smith could also create a project much like that of the American Chestnut, wherein sugar maples could be initially bred with more hardy stocks and crossed back to almost genetic purity. This endeavor would be comparable with that of the American Chestnut project, presumably both in time and cost. 
-The greatest roadblock would probably be that of maintaining the maple copse well into the future. Unless an effort is actively made to continue and evolve the project, it could fall into disuse and the maples could die off.
-The hope is that this maple project would have a net positive effect on the local environment. Sugar maple trees are already a well established species in our local ecosystems, and therefore do not pose the threat of becoming an invasive species. The creation of maple forest could create a small carbon sink, and would not be as difficult to maintain as the vast swaths of pasture MacLeish currently has.
-
-
 ![Treebeard is done with this climate change BS](https://static.comicvine.com/uploads/scale_medium/12/128795/3643962-elder+ent+3+by+moonxels.jpg){#id .class width=2in height=3in}
 
+#Problem Statement
+Given the MacLeish data, we wanted to find out how the timing of the maple sugaring season is changing as a result of global climate change. 
+
+#Introduction
+Sugar maple trees, *Acer saccharum*, are a vital part of the economic and ecological systems of Massachusetts and the northeastern United States. Maple sap is collected and boiled down into syrup to create a valuable commodity for the state. 
+
+Maple sap production requires a delicate balance of weather conditions that are only achieved during “sugaring season”, or the spring season in temperate areas. Specifically, the temperature fluctuations must be such that the temperature is above freezing (32 degrees fahrenheit) during the day, and below freezing at night. 
+
+Global climate change stands to have a significant impact on maple tree function and distribution within the coming years. Tree availability and health as well as timing and length of the tapping season are among the most vulnerable factors in the sugaring industry. Fluctuations in climatic temperature and other conditions could lead to altered suitability of habitat and reductions in maple distribution in most of the United States by 2100. 
+
+Tree health could be negatively impacted by acid rain, insect pests, and other ailments. The stress of surviving one ailment makes the tree more susceptible to other stressors; this lessens the likelihood of tree survival in the face of climate change. As more trees die off and the habitat becomes increasingly warped, tree distribution will continue to shrink.
 
 ```{r warning= FALSE, message= FALSE}
 library(tidyverse)
@@ -31,12 +31,6 @@ library(macleish)
 library(ggplot2)
 library(ggthemes)
 ```
-
-  Sugar maple trees, *Acer saccharum*, are a vital part of the economic and ecological systems of Massachusetts and the northeastern United States. Maple sap is collected and boiled down into syrup to create a valuable commodity for the state. 
-Maple sap production requires a delicate balance of weather conditions that are only achieved during “sugaring season”, or the spring season in temperate areas. Specifically, the temperature fluctuations must be such that the temperature is above freezing (32 degrees fahrenheit) during the day, and below freezing at night. 
-  Global climate change stands to have a significant impact on maple tree function and distribution within the coming years. Tree availability and health as well as timing and length of the tapping season are among the most vulnerable factors in the sugaring industry. Fluctuations in climatic temperature and other conditions could lead to altered suitability of habitat and reductions in maple distribution in most of the United States by 2100. 
-Tree health could be negatively impacted by acid rain, insect pests, and other ailments. The stress of surviving one ailment makes the tree more susceptible to other stressors; this lessens the likelihood of tree survival in the face of climate change. As more trees die off and the habitat becomes increasingly warped, tree distribution will continue to shrink.
-
 
 ```{r warning= FALSE, message= FALSE, results= 'hide'}
 
@@ -62,7 +56,9 @@ sap <- macleish::maple_sap
 forests <- macleish_layers[["forests"]]
 ```
 
-#HERE IS THE MAP OF ORCHARDS AND WHATELY
+#How does this relate to Smith?
+ALthough it may not be known to some students, Smith collects maple sap at the MacLeish Field Station, which the college owns, that is around 20 minutes away from main campus. MacLeish is 240 acres of land, located in West Whately, Massachusetts. Areas of maple trees where you collect sap are called "sugar bushes," and Reid Bertone-Johnson, manager of MacLeish, says that they collect sap from the sugar bush closer to the center of MacLeish, near the observatory and "bunker,"
+and that there is another sugar bush further into the property that they've never tapped but may in the future. 
 
 ```{r warning= FALSE, message= FALSE,  fig.width=8, fig.height= 3, fig.align="center"}
 #What types of maple forests are there? Where are they?
@@ -90,7 +86,6 @@ leaflet()%>%
   addMarkers(lng= -72.68055556, lat = 42.44888889, label= "Whately Monitoring Station")
   
 ```
-#SOME BACKGROUND
 
 ```{r warning= FALSE, message= FALSE}
 #Wrangling the whately data
@@ -185,7 +180,8 @@ Spring_sap <- Months_of_Sap %>%
   
 ```
 
-#PLOTTIN THEM TRENDS
+#Sap Season Trends
+Pictured below is the total number of days on which sap could be collected plotted against typical sugaring season months. It can be seen that the number of possible collection days increases in more recent years in months that previously would have been too cold to tap in, primarily January and February. Since tapping requires temperatures above freezing during the day, this graph--along with other factors--is indicative of a warming climate. 
 
 ```{r warning=FALSE, message= FALSE, fig.width=10, fig.height= 7, fig.align="center"}
 #plotting to see some trends-- number of days sap was collected per month
@@ -202,9 +198,11 @@ ggplot(Spring_sap, aes(x=Month, y= total_days, color= Year))+
 
 ```
 
-  Pictured below is the total number of days on which sap could be collected plotted against typical sugaring season months. It can be seen that the number of possible collection days increases in more recent years in months that previously would have been too cold to tap in, primarily January and February. Since tapping requires temperatures above freezing during the day, this graph--along with other factors--is indicative of a warming climate. 
+#Infographics from ClimateCentral.org
 
-#DO THESE AGREE WITH CLIMATE CHANGE????? PROBABLY IDK BUT WE SHOULD PUT SOME INFO AND SOME PICS HERE
+!([http://assets.climatecentral.org/images/made/2017MapleSyrup_Map_en_title_lg_660_371_s_c1_c_c.jpg]
+
+!()[http://assets.climatecentral.org/images/made/2017MapleSyrup_FreezeThawExplainer_part2_en_title_lg_660_371_s_c1_c_c.jpg]
 
 ```{r warning= FALSE, message= FALSE}
 #OK so i want to map the days in a month that are reasonable out of the total days in that month versus time so I'm rewriting these functions so I can do that
@@ -308,25 +306,24 @@ calendarPlot(possible_and_actual_sap_days, pollutant= "sap_gals", breaks= c(0, 1
 
 ```
 
-  Smith College has the opportunity to ameliorate maple loss in a variety of ways. One option could be the creation and careful maintenance of a maple stand on the MacLeish Field Station property. Student labor could significantly cut costs for planting and routine maintenance, though the college would still be responsible for purchasing the original plants and other associated costs. Acer saccharum tend to reach maturity at 20 to 30 years of age and can grow to be 300 or even 400 years old. If new generations are planted to replace those lost, the project could continue indefinitely. Smith could also create a project much like that of the American Chestnut, wherein sugar maples could be initially bred with more hardy stocks and crossed back to almost genetic purity. This endeavor would be comparable with that of the American Chestnut project, presumably both in time and cost. 
-  The greatest roadblock would probably be that of maintaining the maple copse well into the future. Unless an effort is actively made to continue and evolve the project, it could fall into disuse and the maples could die off.
-  The hope is that this maple project would have a net positive effect on the local environment. Sugar maple trees are already a well established species in our local ecosystems, and therefore do not pose the threat of becoming an invasive species. The creation of maple forest could create a small carbon sink, and would not be as difficult to maintain as the vast swaths of pasture MacLeish currently has.
-
-
-
 #SHOULD PROBABLY PUT SOME CONCLUSIONS RIGHT HERE
 
 #SUGGESTIONS FOR THE MACLEISH PEEPS
+Smith College has the opportunity to ameliorate maple loss in a variety of ways. One option could be the creation and careful maintenance of a maple stand on the MacLeish Field Station property. Student labor could significantly cut costs for planting and routine maintenance, though the college would still be responsible for purchasing the original plants and other associated costs. Acer saccharum tend to reach maturity at 20 to 30 years of age and can grow to be 300 or even 400 years old. If new generations are planted to replace those lost, the project could continue indefinitely. Smith could also create a project much like that of the American Chestnut, wherein sugar maples could be initially bred with more hardy stocks and crossed back to almost genetic purity. This endeavor would be comparable with that of the American Chestnut project, presumably both in time and cost. 
 
-Link to our GitHub Repository[^1]
-Works Cited[^2]
+Additionally, what some other maple sap-producing farms have done in Massachusetts is implementing some cautious practices in response to climate change in order to produce the greatest amount of sap in a shorter season. This measures include sustainable forest management, better sanitation practices of maple taps, and using a vacuum system to maximize maple collection. There is also the possibility that if the correct temperatures could no longer be reached in the spring season, some tapping could occur in the fall if the conditions were right. 
 
-![](http://thumbpress.com/wp-content/uploads/2016/02/cool-wine-bottle-Canada-maple-syrup.jpg){#id .class width=2in height=3in}
+The greatest roadblock would probably be that of maintaining the maple copse well into the future. Unless an effort is actively made to continue and evolve the project, it could fall into disuse and the maples could die off.
 
-=======
-[^1]:https://github.com/emilyamorris/mini-project-3
-[^2]:Works Cited 
-Rapp, Joshua. “Climate Impacts.” ACERnet, Dept. of Environmental Conservation UMass Amherst, 7 Dec. 2015, blogs.umass.edu/acernet/climate-impacts/. Accessed 13 Apr. 2018.
+The hope is that this maple project would have a net positive effect on the local environment. Sugar maple trees are already a well established species in our local ecosystems, and therefore do not pose the threat of becoming an invasive species. The creation of maple forest could create a small carbon sink, and would not be as difficult to maintain as the vast swaths of pasture MacLeish currently has.
+
+Link to our GitHub Repository [^1]
+Works Cited [^2]
+
+!()[http://thumbpress.com/wp-content/uploads/2016/02/cool-wine-bottle-Canada-maple-syrup.jpg]
+
+[^1]: https://github.com/emilyamorris/mini-project-3
+[^2]: Rapp, Joshua. “Climate Impacts.” ACERnet, Dept. of Environmental Conservation UMass Amherst, 7 Dec. 2015, blogs.umass.edu/acernet/climate-impacts/. Accessed 13 Apr. 2018.
 Schoenfuss, Amanda. “The Life History and Reproduction of Acer saccharum.” Sugar Maple: Acer saccharum, 2010, bioweb.uwlax.edu/bio203/2010/schoenfu_aman/reproduction.htm. Accessed 13 Apr. 2018.
 
 
