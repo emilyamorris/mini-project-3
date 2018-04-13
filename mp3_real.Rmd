@@ -1,0 +1,327 @@
+---
+title: "Maple Syrup"
+author: "Emily M., Sylvie L., and Hannah R.D."
+date: "April 3, 2018"
+output: 
+  html_document:
+    code_folding: hide
+    theme: cerulean
+---
+
+#TITLEEEE and FANCY INTRO 
+
+![treebeard is done with your bs](https://static.comicvine.com/uploads/scale_medium/12/128795/3643962-elder+ent+3+by+moonxels.jpg)
+
+```{r warning= FALSE, message= FALSE}
+library(tidyverse)
+library(leaflet)
+library(sf)
+library(macleish)
+library(ggplot2)
+library(ggthemes)
+```
+
+  Sugar maple trees, *Acer saccharum*, are a vital part of the economic and ecological systems of Massachusetts and the northeastern United States. Maple sap is collected and boiled down into syrup to create a valuable commodity for the state. 
+Maple sap production requires a delicate balance of weather conditions that are only achieved during “sugaring season”, or the spring season in temperate areas. Specifically, the temperature fluctuations must be such that the temperature is above freezing (32 degrees fahrenheit) during the day, and below freezing at night. 
+  Global climate change stands to have a significant impact on maple tree function and distribution within the coming years. Tree availability and health as well as timing and length of the tapping season are among the most vulnerable factors in the sugaring industry. Fluctuations in climatic temperature and other conditions could lead to altered suitability of habitat and reductions in maple distribution in most of the United States by 2100. 
+Tree health could be negatively impacted by acid rain, insect pests, and other ailments. The stress of surviving one ailment makes the tree more susceptible to other stressors; this lessens the likelihood of tree survival in the face of climate change. As more trees die off and the habitat becomes increasingly warped, tree distribution will continue to shrink.
+
+
+```{r warning= FALSE, message= FALSE, results= 'hide'}
+#Attaining the orchard live weather data from Professor Baumer's R package (this part is not our code)
+macleish <- etl("macleish")
+macleish %>%
+  etl_update()
+whately <- macleish %>%
+  tbl("whately")
+whately %>%
+  mutate(the_year = strftime('%Y', when)) %>%
+  group_by(the_year) %>%
+  summarize(N = n(), begin = min(when), end = max(when), avg_temp = mean(temperature))
+orchard <- macleish %>%
+  tbl("orchard")
+orchard %>%
+  mutate(the_year = strftime('%Y', when)) %>%
+  group_by(the_year) %>%
+  summarize(N = n(), begin = min(when), end = max(when), avg_temp = mean(temperature))
+
+#Collecting the wild not-data sets that orchard and whately are, getting the sap data and the forest data (this part is our code)
+orchard_data <-collect(orchard)
+whately_data <- collect(whately)
+sap <- macleish::maple_sap
+forests <- macleish_layers[["forests"]]
+```
+
+#HERE IS THE MAP OF ORCHARDS AND WHATELY
+
+```{r warning= FALSE, message= FALSE,  fig.width=8, fig.height= 3, fig.align="center"}
+#What types of maple forests are there? Where are they?
+
+forests <- forests%>%
+  rename("forest_type"="Sheet1__Na")%>%
+  mutate(area= st_area(forests))
+
+forest_areas <- forests %>%
+  group_by(forest_type)%>%
+  summarise(total_area= sum(area))%>%
+  filter(str_detect(forest_type, "Maple"))
+
+#Making a palette for the two types of Maple forests
+fm_pal <- colorFactor(
+  palette= c('#42f47a', '#137a33'),
+  domain= forest_areas$forest_type
+)
+
+#Leaflet plot to map where the maple forests are
+
+leaflet()%>%
+  addTiles()%>%
+  addPolygons(data=forest_areas, color= ~fm_pal(forest_type))%>%
+  addMarkers(lng= -72.68055556, lat = 42.44888889, label= "Whately Monitoring Station")
+  
+```
+#SOME BACKGROUND
+
+```{r warning= FALSE, message= FALSE}
+#Wrangling the orchard and whately data
+
+orchard_data$Date <- format(as.POSIXct(orchard_data$when, format= "%Y-%m-%dT%H:%M:%SZ"), "%Y-%m-%d")
+orchard_data$Year <- format(as.POSIXct(orchard_data$when, format= "%Y-%m-%dT%H:%M:%SZ"), "%Y")
+orchard_data$Month <- format(as.POSIXct(orchard_data$when, format="%Y-%m-%dT%H:%M:%SZ"), "%m")
+orchard_data$Day <- format(as.POSIXct(orchard_data$when, format="%Y-%m-%dT%H:%M:%SZ"), "%d")
+orchard_data$Time <- format(as.POSIXct(orchard_data$when, format="%Y-%m-%dT%H:%M:%SZ"), "%H.%M%S")
+
+whately_data$Date <- format(as.POSIXct(whately_data$when, format= "%Y-%m-%dT%H:%M:%SZ"), "%Y-%m-%d")
+whately_data$Year <- format(as.POSIXct(whately_data$when,format=("%Y-%m-%dT%H:%M:%SZ")),"%Y")
+whately_data$Month <- format(as.POSIXct(whately_data$when,format=("%Y-%m-%dT%H:%M:%SZ")),"%m")
+whately_data$Day <- format(as.POSIXct(whately_data$when,format=("%Y-%m-%dT%H:%M:%SZ")),"%d")
+whately_data$Time <- format(as.POSIXct(whately_data$when, format="%Y-%m-%dT%H:%M:%SZ"), "%H.%M%S")
+```
+
+```{r warning= FALSE, message= FALSE}
+#more wrangling
+
+Night_weather <- function(name_arg){
+  na.omit(name_arg)%>%
+  transform(temperature= as.numeric(temperature),
+            wind_speed= as.numeric(wind_speed),
+            wind_dir = as.numeric(wind_dir),
+            rel_humidity= as.numeric(rel_humidity),
+            pressure= as.numeric(pressure))%>%
+  filter(Time< 6|Time > 18)%>%
+  select(temperature:Day)%>%
+  group_by(Year, Month, Day)%>%
+  summarise(min_night_temp = min(temperature),
+            night_wind_speed = mean(wind_speed),
+            night_wind_dir = mean(wind_dir),
+            night_rel_humidity = mean(rel_humidity),
+            night_pressure = mean(pressure))%>%
+    filter(min_night_temp < 0)
+}
+
+Day_weather <- function(name_arg){
+  na.omit(name_arg)%>%
+  transform(temperature= as.numeric(temperature),
+            wind_speed= as.numeric(wind_speed),
+            wind_dir = as.numeric(wind_dir),
+            rel_humidity= as.numeric(rel_humidity),
+            pressure= as.numeric(pressure))%>%
+  filter(Time>6|Time<18)%>%
+  select(temperature:Day)%>%
+  group_by(Year, Month, Day)%>%
+  summarise(max_day_temp = max(temperature),
+            day_wind_speed = mean(wind_speed),
+            day_wind_dir = mean(wind_dir),
+            day_rel_humidity = mean(rel_humidity),
+            day_pressure = mean(pressure))%>%
+    filter(max_day_temp > 0)
+}
+
+ideal_days <- function(name_arg) {
+  Day_weather(name_arg)%>%
+    inner_join(Night_weather(name_arg), by = c("Year", "Month", "Day"))
+}
+
+```
+
+```{r warning= FALSE, message= FALSE}
+#using those functions
+
+Whately_Weather <- ideal_days(whately_data)
+
+#the orchard weather is really only for ground temperatures and in the middle of a field, whearas the whately station is in the forest and gets readings from the air so it's more useful. 
+Orchard_Weather <- ideal_days(orchard_data)
+
+```
+
+```{r warning= FALSE, message= FALSE}
+#wrangling the sap data a bit
+
+sap$Year <- format(as.POSIXct(sap$when, format= "%Y-%m-%d"), "%Y")
+sap$Month <- format(as.POSIXct(sap$when, format="%Y-%m-%d"), "%m")
+sap$Day <- format(as.POSIXct(sap$when, format="%Y-%m-%d"), "%d")
+
+Sap <- sap %>%
+  rename("Sap_in_gal"="sap")%>%
+  select(Sap_in_gal, Year:Day)
+
+WW_and_Sap <- Whately_Weather %>%
+  left_join(Sap, by = c("Year", "Month", "Day"))
+
+WW_and_Sap$Date <- as.Date(with(WW_and_Sap, paste(Year, Month, Day, sep= "-")), "%Y-%m-%d")
+
+#editing data so we can see trends
+WW_and_Sap_Summary <- WW_and_Sap %>%
+  group_by(Year, Month)%>%
+  summarise(total_days= n())
+
+Months_of_Sap <- WW_and_Sap_Summary%>%
+  mutate(Month = recode(Month, "01"="January", "02"="February", "03"="March", "04"="April", "10"="October", "11"="November", "12"="December"))
+
+Spring_sap <- Months_of_Sap %>%
+  filter(Month== "January"|Month=="February"|Month=="March"|Month=="April")
+  
+```
+
+#PLOTTIN THEM TRENDS
+
+```{r warning=FALSE, message= FALSE, fig.width=10, fig.height= 7, fig.align="center"}
+#plotting to see some trends-- number of days sap was collected per month
+
+ggplot(Spring_sap, aes(x=Month, y= total_days, color= Year))+
+  geom_point()+
+  geom_line(aes(group=Year))+
+  scale_x_discrete(limits=c("January","February","March","April"))+
+  xlab("Month")+
+  ylab("Total Number of Days on Which Could Be Collected (by year)")+
+  theme_economist()+
+  scale_color_brewer(palette="YlGnBu")+
+  labs(title= "Possible Sap Collection Days versus Months of Spring", subtitle= "With changes by year")
+
+```
+
+  Pictured below is the total number of days on which sap could be collected plotted against typical sugaring season months. It can be seen that the number of possible collection days increases in more recent years in months that previously would have been too cold to tap in, primarily January and February. Since tapping requires temperatures above freezing during the day, this graph--along with other factors--is indicative of a warming climate. 
+
+#DO THESE AGREE WITH CLIMATE CHANGE????? PROBABLY IDK BUT WE SHOULD PUT SOME INFO AND SOME PICS HERE
+
+```{r warning= FALSE, message= FALSE}
+#OK so i want to map the days in a month that are reasonable out of the total days in that month versus time so I'm rewriting these functions so I can do that
+
+Night_weather_all <- function(name_arg){
+  na.omit(name_arg)%>%
+  transform(temperature= as.numeric(temperature),
+            wind_speed= as.numeric(wind_speed),
+            wind_dir = as.numeric(wind_dir),
+            rel_humidity= as.numeric(rel_humidity),
+            pressure= as.numeric(pressure))%>%
+  filter(Time< 6|Time > 18, Month== "01"|Month== "02"|Month=="03"|Month=="04")%>%
+  select(temperature:Day)%>%
+  group_by(Year, Month, Day)%>%
+  summarise(min_night_temp = min(temperature),
+            night_wind_speed = mean(wind_speed),
+            night_wind_dir = mean(wind_dir),
+            night_rel_humidity = mean(rel_humidity),
+            night_pressure = mean(pressure))%>%
+    filter(Month < 5)%>%
+    mutate(correct_night_temp= ifelse(min_night_temp <0, 1, 0))
+}
+
+Day_weather_all <- function(name_arg){
+  na.omit(name_arg)%>%
+  transform(temperature= as.numeric(temperature),
+            wind_speed= as.numeric(wind_speed),
+            wind_dir = as.numeric(wind_dir),
+            rel_humidity= as.numeric(rel_humidity),
+            pressure= as.numeric(pressure))%>%
+  filter(Time>6|Time<18, Month== "01"|Month== "02"|Month=="03"|Month=="04")%>%
+  select(temperature:Day)%>%
+  group_by(Year, Month, Day)%>%
+  summarise(max_day_temp = max(temperature),
+            day_wind_speed = mean(wind_speed),
+            day_wind_dir = mean(wind_dir),
+            day_rel_humidity = mean(rel_humidity),
+            day_pressure = mean(pressure))%>%
+    mutate(correct_day_temp= ifelse(max_day_temp>0, 1, 0))
+}
+
+all_days <- function(name_arg) {
+  Day_weather_all(name_arg)%>%
+    inner_join(Night_weather_all(name_arg), by = c("Year", "Month", "Day"))%>%
+    mutate(temp_total = correct_night_temp+ correct_day_temp,
+           correct_temp = ifelse(temp_total == 2, "TRUE", "FALSE")) %>%
+    select(Year:correct_temp, -correct_night_temp, -correct_day_temp)%>%
+    mutate(date = as.Date(paste(Year, Month, Day, sep= '-'), "%Y-%m-%d"))
+    
+}
+
+```
+
+```{r warning= FALSE, message= FALSE}
+weather_and_all_possible_days <- all_days(whately_data)
+
+#package needed to make calendar plots
+#devtools::install_github('davidcarslaw/openair')
+
+#making calendar plot function
+library(openair)
+
+#adding the days of sap collection onto the weather_and_all_possible days
+
+sap_gals <- sap %>%
+  rename("date"="when", "sap_gals"="sap")
+
+possible_and_actual_sap_days <- weather_and_all_possible_days %>%
+  left_join(sap_gals, by= "date")%>%
+  replace_na(list(sap_gals= 0))
+
+```
+
+#PLOTTIN MORE TRENDS YA'LL BUT THIS TIME WITH CALENDARS AND REAL SAP
+
+```{r warning= FALSE, message= FALSE, fig.show= "hold", fig.width=20, fig.height= 7, fig.align="center"}
+#plotting all the years as calendars--can't use a function because calendarPlot doesn't allow you to add individual titles to things the way ggplot does, so either all the plots wouldn't have years signfied in their titles or we can just use the same code a few times. For clarity-sake we decided not to use a function (even though we tried)
+
+#2012
+calendarPlot(possible_and_actual_sap_days, pollutant= "temp_total", year= 2012, breaks= c(0, 1, 2), labels= c("Incorrect Temperatures", "Correct Temperatures"), cols= c("#d5f2f0", "#45e05f"), main= "2012 All Possible Days")
+
+#2013
+calendarPlot(possible_and_actual_sap_days, pollutant= "temp_total", year= 2013, breaks= c(0, 1, 2), labels= c("Incorrect Temperatures", "Correct Temperatures"), cols= c("#d5f2f0", "#45e05f"), main= "2013 All Possible Days")
+calendarPlot(possible_and_actual_sap_days, pollutant= "sap_gals", breaks= c(0, 10, 20, 30, 40, 50, 60, 80, 100), year= 2013, cols= "Blues", main= "2013 Actual Days Collected", limits= c(0, 100), key.header= "Sap Collected", key.footer= "(In Gallons)")
+
+#2014
+calendarPlot(possible_and_actual_sap_days, pollutant= "temp_total", year= 2014, breaks= c(0, 1, 2), labels= c("Incorrect Temperatures", "Correct Temperatures"), cols= c("#d5f2f0", "#45e05f"), main= "2014 All Possible Days")
+calendarPlot(possible_and_actual_sap_days, pollutant= "sap_gals", breaks= c(0, 10, 20, 30, 40, 50, 60, 80, 100), year= 2014, cols= "Blues", main= "2014 Actual Days Collected", limits= c(0, 100), key.header= "Sap Collected", key.footer= "(In Gallons)")
+
+#2015
+calendarPlot(possible_and_actual_sap_days, pollutant= "temp_total", year= 2015, breaks= c(0, 1, 2), labels= c("Incorrect Temperatures", "Correct Temperatures"), cols= c("#d5f2f0", "#45e05f"), main= "2015 All Possible Days")
+calendarPlot(possible_and_actual_sap_days, pollutant= "sap_gals", breaks= c(0, 10, 20, 30, 40, 50, 60, 80, 100), year= 2015, cols= "Blues", main= "2015 Actual Days Collected", limits= c(0, 100), key.header= "Sap Collected", key.footer= "(In Gallons)")
+
+#2016
+calendarPlot(possible_and_actual_sap_days, pollutant= "temp_total", year= 2016, breaks= c(0, 1, 2), labels= c("Incorrect Temperatures", "Correct Temperatures"), cols= c("#d5f2f0", "#45e05f"), main= "2016 All Possible Days")
+
+#2017
+calendarPlot(possible_and_actual_sap_days, pollutant= "temp_total", year= 2017, breaks= c(0, 1, 2), labels= c("Incorrect Temperatures", "Correct Temperatures"), cols= c("#d5f2f0", "#45e05f"), main= "2017 All Possible Days")
+calendarPlot(possible_and_actual_sap_days, pollutant= "sap_gals", breaks= c(0, 10, 20, 30, 40, 50, 60, 80, 100), year= 2017, cols= "Blues", main= "2017 Actual Days Collected", limits= c(0, 100), key.header= "Sap Collected", key.footer= "(In Gallons)")
+
+
+```
+
+  Smith College has the opportunity to ameliorate maple loss in a variety of ways. One option could be the creation and careful maintenance of a maple stand on the MacLeish Field Station property. Student labor could significantly cut costs for planting and routine maintenance, though the college would still be responsible for purchasing the original plants and other associated costs. Acer saccharum tend to reach maturity at 20 to 30 years of age and can grow to be 300 or even 400 years old. If new generations are planted to replace those lost, the project could continue indefinitely. Smith could also create a project much like that of the American Chestnut, wherein sugar maples could be initially bred with more hardy stocks and crossed back to almost genetic purity. This endeavor would be comparable with that of the American Chestnut project, presumably both in time and cost. 
+  The greatest roadblock would probably be that of maintaining the maple copse well into the future. Unless an effort is actively made to continue and evolve the project, it could fall into disuse and the maples could die off.
+  The hope is that this maple project would have a net positive effect on the local environment. Sugar maple trees are already a well established species in our local ecosystems, and therefore do not pose the threat of becoming an invasive species. The creation of maple forest could create a small carbon sink, and would not be as difficult to maintain as the vast swaths of pasture MacLeish currently has.
+
+
+
+#SHOULD PROBABLY PUT SOME CONCLUSIONS RIGHT HERE
+
+#SUGGESTIONS FOR THE MACLEISH PEEPS
+
+Link to our GitHub Repository[^1]
+
+<<<<<<< HEAD
+
+![](http://thumbpress.com/wp-content/uploads/2016/02/cool-wine-bottle-Canada-maple-syrup.jpg)
+
+=======
+[^1]:https://github.com/emilyamorris/mini-project-3
+>>>>>>> 4c4d362397e4cca6780fb6199da37a03018557c7
