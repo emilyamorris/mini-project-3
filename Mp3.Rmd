@@ -1,7 +1,8 @@
 ---
-title: "Maple Syrup"
+title: "Goodbye Syrup: The Trees Are Dying"
+subtitle: Shake it, shake it Sugaree
 author: "Emily M., Sylvie L., and Hannah R.D."
-date: "April 3, 2018"
+date: "April 15, 2018"
 output: 
   html_document:
     code_folding: hide
@@ -9,6 +10,14 @@ output:
 ---
 
 #TITLEEEE and FANCY INTRO 
+Sugar maple trees, Acer saccharum, are a vital part of the economic and ecological systems of Massachusetts and the northeastern United States. Maple sap is collected and boiled down into syrup to create a valuable commodity for the state. 
+Maple sap production requires a delicate balance of weather conditions that are only achieved during “sugaring season”, or the spring season in temperate areas. Specifically, the temperature fluctuations must be such that the temperature is above freezing (32 degrees fahrenheit) during the day, and below freezing at night. 
+Global climate change stands to have a significant impact on maple tree function and distribution within the coming years. Tree availability and health as well as timing and length of the tapping season are among the most vulnerable factors in the sugaring industry. Fluctuations in climatic temperature and other conditions could lead to altered suitability of habitat and reductions in maple distribution in most of the United States by 2100. 
+Tree health could be negatively impacted by acid rain, insect pests, and other ailments. The stress of surviving one ailment makes the tree more susceptible to other stressors; this lessens the likelihood of tree survival in the face of climate change. As more trees die off and the habitat becomes increasingly warped, tree distribution will continue to shrink.
+Smith College has the opportunity to ameliorate maple loss in a variety of ways. One option could be the creation and careful maintenance of a maple stand on the MacLeish Field Station property. Student labor could significantly cut costs for planting and routine maintenance, though the college would still be responsible for purchasing the original plants and other associated costs. Acer saccharum tend to reach maturity at 20 to 30 years of age and can grow to be 300 or even 400 years old. If new generations are planted to replace those lost, the project could continue indefinitely. Smith could also create a project much like that of the American Chestnut, wherein sugar maples could be initially bred with more hardy stocks and crossed back to almost genetic purity. This endeavor would be comparable with that of the American Chestnut project, presumably both in time and cost. 
+The greatest roadblock would probably be that of maintaining the maple copse well into the future. Unless an effort is actively made to continue and evolve the project, it could fall into disuse and the maples could die off.
+The hope is that this maple project would have a net positive effect on the local environment. Sugar maple trees are already a well established species in our local ecosystems, and therefore do not pose the threat of becoming an invasive species. The creation of maple forest could create a small carbon sink, and would not be as difficult to maintain as the vast swaths of pasture MacLeish currently has.
+
 
 ![treebeard is done with your bs](https://static.comicvine.com/uploads/scale_medium/12/128795/3643962-elder+ent+3+by+moonxels.jpg)
 
@@ -318,10 +327,7 @@ calendarPlot(possible_and_actual_sap_days, pollutant= "sap_gals", breaks= c(0, 1
 
 Link to our GitHub Repository[^1]
 
-<<<<<<< HEAD
-
 ![](http://thumbpress.com/wp-content/uploads/2016/02/cool-wine-bottle-Canada-maple-syrup.jpg)
 
 =======
 [^1]:https://github.com/emilyamorris/mini-project-3
->>>>>>> 4c4d362397e4cca6780fb6199da37a03018557c7
