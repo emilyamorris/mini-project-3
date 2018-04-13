@@ -20,7 +20,8 @@ The greatest roadblock would probably be that of maintaining the maple copse wel
 The hope is that this maple project would have a net positive effect on the local environment. Sugar maple trees are already a well established species in our local ecosystems, and therefore do not pose the threat of becoming an invasive species. The creation of maple forest could create a small carbon sink, and would not be as difficult to maintain as the vast swaths of pasture MacLeish currently has.
 
 
-![treebeard is done with your bs](https://static.comicvine.com/uploads/scale_medium/12/128795/3643962-elder+ent+3+by+moonxels.jpg)
+![Treebeard is done with this climate change BS](https://static.comicvine.com/uploads/scale_medium/12/128795/3643962-elder+ent+3+by+moonxels.jpg){#id .class width=2in height=3in}
+
 
 ```{r warning= FALSE, message= FALSE}
 library(tidyverse)
@@ -328,7 +329,7 @@ calendarPlot(possible_and_actual_sap_days, pollutant= "sap_gals", breaks= c(0, 1
 
 Link to our GitHub Repository[^1]
 
-![](http://thumbpress.com/wp-content/uploads/2016/02/cool-wine-bottle-Canada-maple-syrup.jpg)
+![](http://thumbpress.com/wp-content/uploads/2016/02/cool-wine-bottle-Canada-maple-syrup.jpg){#id .class width=2in height=3in}
 
 =======
 [^1]:https://github.com/emilyamorris/mini-project-3
