@@ -39,7 +39,9 @@ Tree health could be negatively impacted by acid rain, insect pests, and other a
 
 
 ```{r warning= FALSE, message= FALSE, results= 'hide'}
+
 #Attaining the orchard live weather data from Professor Baumer's R package (this part is not our code)
+
 macleish <- etl("macleish")
 
 macleish %>%
@@ -151,8 +153,6 @@ ideal_days <- function(name_arg) {
 
 Whately_Weather <- ideal_days(whately_data)
 
-#the orchard weather is really only for ground temperatures and in the middle of a field, whearas the whately station is in the forest and gets readings from the air so it's more useful. 
-Orchard_Weather <- ideal_days(orchard_data)
 
 ```
 
