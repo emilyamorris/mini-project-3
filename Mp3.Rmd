@@ -9,7 +9,7 @@ output:
     theme: cerulean
 ---
 
-![Treebeard is done with this climate change BS](https://static.comicvine.com/uploads/scale_medium/12/128795/3643962-elder+ent+3+by+moonxels.jpg){#id .class width=2in height=3in}
+![*Treebeard is done with this climate change BS*](https://static.comicvine.com/uploads/scale_medium/12/128795/3643962-elder+ent+3+by+moonxels.jpg){#id .class width=3in height=4in}
 
 ####Problem Statement
 Given the MacLeish data, we wanted to find out how the timing of the maple sugaring season is changing as a result of global climate change. 
@@ -100,7 +100,7 @@ whately_data$Time <- format(as.POSIXct(whately_data$when, format="%Y-%m-%dT%H:%M
 ```
 
 ```{r warning= FALSE, message= FALSE}
-#more wrangling
+#more wrangling: since mapling requires evening temperatures below zero and day temperatures above zero, we separate the data by time so that we could look at night weather and day weather. We then selected for the days when the two temperature ranges were correct (ie, it got to a min temp below zero during the night hours and a max temp above zero during the day hours). Because our functions collect data by 24 hour cycles and not day and night cycles, "ideal days" are occassionally shifted from either the day before or after as this was the most logical way we could figure out to sort the data.
 
 Night_weather <- function(name_arg){
   na.omit(name_arg)%>%
@@ -205,9 +205,10 @@ ggplot(Spring_sap, aes(x=Month, y= total_days, color= Year))+
 
 ####Infographics from ClimateCentral.org
 
-![](http://assets.climatecentral.org/images/made/2017MapleSyrup_Map_en_title_lg_660_371_s_c1_c_c.jpg){#id .class width=3in height=4in}
+![](http://assets.climatecentral.org/images/made/2017MapleSyrup_Map_en_title_lg_660_371_s_c1_c_c.jpg){#id .class width=4in height=5in}
 
-![](http://assets.climatecentral.org/images/made/2017MapleSyrup_FreezeThawExplainer_part2_en_title_lg_660_371_s_c1_c_c.jpg){#id .class width=3in height=4in}
+![](http://assets.climatecentral.org/images/made/2017MapleSyrup_FreezeThawExplainer_part2_en_title_lg_660_371_s_c1_c_c.jpg){#id .class width=4in height=5in}
+
 
 The analysis we did on the MacLeish data is compatible with these climate change measurements and predictions from UVM, which show that warmer temperatures are leading to an earlier and shorter sap season. 
 
@@ -284,7 +285,7 @@ possible_and_actual_sap_days <- weather_and_all_possible_days %>%
 ```
 
 ####MacLeish Sap and Weather Trends, by Calendar Day
-We thought it would be interesting to see what the mapling season looked like in calendar form, both to help us visualize the changes in weather over time and so that we could compare the actual collection days with the total possible days. These calendars map those data from 2012-2017. No sap collected in 2012 or 2016, but the weather data is still mapped below. The pattern of when sap was actually collected is compatible with the overall national trends of sap production. It is clear from these calendars that Smith's maple syrup ventures are actually pretty limited, and that across the years, despite the number of possible days, sap is only really collected in limited amounts. Predictions for Macleish's mapling season is therefore also limited, but warming climates do seem to be shifting the season from primarly March through early April towards mid February through late March. 
+We thought it would be interesting to see what the mapling season looked like in calendar form, both to help us visualize the changes in weather over time and so that we could compare the actual collection days with the total possible days. These calendars map those data from 2012-2017. No sap collected in 2012 or 2016, but the weather data is still mapped below. The pattern of when sap was actually collected is compatible with the overall national trends of sap production. It is clear from these calendars that Smith's maple syrup ventures are actually pretty limited, and that across the years, despite the number of possible days, sap is only really collected in limited amounts. Predictions for Macleish's mapling season are therefore also limited, but warming climates do seem to be shifting the season from primarly March through early April towards mid February through late March. 
 
 ```{r warning= FALSE, message= FALSE, fig.show= "hold", fig.width=20, fig.height= 7, fig.align="center"}
 #plotting all the years as calendars--can't use a function because calendarPlot doesn't allow you to add individual titles to things the way ggplot does, so either all the plots wouldn't have years signfied in their titles or we can just use the same code a few times. For clarity-sake we decided not to use a function (even though we tried)
